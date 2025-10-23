@@ -1,0 +1,251 @@
+name: Validate Plugins
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate-structure:
+    name: Validate Repository Structure
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup jq
+        uses: dcarbone/install-jq-action@v2
+
+      - name: Validate marketplace.json
+        run: |
+          echo "Validating marketplace.json..."
+          jq empty .claude-plugin/marketplace.json
+          echo "✓ Marketplace JSON is valid"
+
+      - name: Check required fields in marketplace
+        run: |
+          echo "Checking required marketplace fields..."
+          
+          # Check top-level required fields
+          if ! jq -e ".name" .claude-plugin/marketplace.json > /dev/null; then
+            echo "✗ Missing required field: name"
+            exit 1
+          fi
+          echo "✓ Field 'name' present"
+          
+          if ! jq -e ".owner" .claude-plugin/marketplace.json > /dev/null; then
+            echo "✗ Missing required field: owner"
+            exit 1
+          fi
+          echo "✓ Field 'owner' present"
+          
+          # Check owner.name exists
+          if ! jq -e ".owner.name" .claude-plugin/marketplace.json > /dev/null; then
+            echo "✗ Missing required field: owner.name"
+            exit 1
+          fi
+          echo "✓ Field 'owner.name' present"
+          
+          if ! jq -e ".plugins" .claude-plugin/marketplace.json > /dev/null; then
+            echo "✗ Missing required field: plugins"
+            exit 1
+          fi
+          echo "✓ Field 'plugins' present"
+          
+          # Check plugins is an array
+          if ! jq -e ".plugins | type == \"array\"" .claude-plugin/marketplace.json > /dev/null; then
+            echo "✗ Field 'plugins' must be an array"
+            exit 1
+          fi
+          echo "✓ Field 'plugins' is an array"
+
+  validate-marketplace-plugins:
+    name: Validate Marketplace Plugin Entries
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup jq
+        uses: dcarbone/install-jq-action@v2
+
+      - name: Validate marketplace plugin entries
+        run: |
+          echo "Validating marketplace plugin entries..."
+          
+          # Check each plugin entry in marketplace
+          plugin_count=$(jq '.plugins | length' .claude-plugin/marketplace.json)
+          
+          for ((i=0; i<$plugin_count; i++)); do
+            echo ""
+            echo "Checking marketplace entry $((i+1))..."
+            
+            # Check required fields for marketplace entries
+            if ! jq -e ".plugins[$i].name" .claude-plugin/marketplace.json > /dev/null; then
+              echo "✗ Plugin entry $((i+1)): Missing required field 'name'"
+              exit 1
+            fi
+            
+            if ! jq -e ".plugins[$i].source" .claude-plugin/marketplace.json > /dev/null; then
+              echo "✗ Plugin entry $((i+1)): Missing required field 'source'"
+              exit 1
+            fi
+            
+            # Check author format if present
+            if jq -e ".plugins[$i].author" .claude-plugin/marketplace.json > /dev/null; then
+              if ! jq -e ".plugins[$i].author | type == \"object\"" .claude-plugin/marketplace.json > /dev/null; then
+                echo "✗ Plugin entry $((i+1)): Field 'author' must be an object"
+                exit 1
+              fi
+              if ! jq -e ".plugins[$i].author.name" .claude-plugin/marketplace.json > /dev/null; then
+                echo "✗ Plugin entry $((i+1)): Field 'author.name' is required when 'author' is present"
+                exit 1
+              fi
+              echo "✓ Plugin entry $((i+1)): Field 'author' is properly formatted"
+            fi
+            
+            plugin_name=$(jq -r ".plugins[$i].name" .claude-plugin/marketplace.json)
+            echo "✓ Marketplace entry for '$plugin_name' is valid"
+          done
+          
+          echo ""
+          echo "✅ All marketplace plugin entries are valid"
+
+  validate-plugins:
+    name: Validate Individual Plugins
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup jq
+        uses: dcarbone/install-jq-action@v2
+
+      - name: Validate each plugin
+        run: |
+          echo "Validating plugin files..."
+
+          # Get all plugin paths
+          plugins=$(jq -r '.plugins[] | select(.source | type == "string") | .source' .claude-plugin/marketplace.json)
+
+          for plugin_path in $plugins; do
+            plugin_name=$(basename "$plugin_path")
+            echo ""
+            echo "Checking plugin: $plugin_name"
+            echo "================================"
+
+            # Check directory exists
+            if [ ! -d "$plugin_path" ]; then
+              echo "✗ Directory not found: $plugin_path"
+              exit 1
+            fi
+            echo "✓ Directory exists"
+
+            # Check plugin.json exists
+            plugin_json="$plugin_path/.claude-plugin/plugin.json"
+            if [ ! -f "$plugin_json" ]; then
+              echo "✗ plugin.json not found at $plugin_json"
+              exit 1
+            fi
+            echo "✓ plugin.json exists"
+
+            # Validate JSON syntax
+            if ! jq empty "$plugin_json" 2>/dev/null; then
+              echo "✗ Invalid JSON in $plugin_json"
+              exit 1
+            fi
+            echo "✓ plugin.json is valid JSON"
+
+            # Check required fields (only 'name' is required)
+            if ! jq -e ".name" "$plugin_json" > /dev/null; then
+              echo "✗ Missing required field: name"
+              exit 1
+            fi
+            echo "✓ Required field 'name' present"
+            
+            # Check optional but recommended fields
+            if jq -e ".author" "$plugin_json" > /dev/null; then
+              # If author exists, check it's an object
+              if ! jq -e ".author | type == \"object\"" "$plugin_json" > /dev/null; then
+                echo "✗ Field 'author' must be an object with 'name' field"
+                exit 1
+              fi
+              if ! jq -e ".author.name" "$plugin_json" > /dev/null; then
+                echo "✗ Field 'author.name' is required when 'author' is present"
+                exit 1
+              fi
+              echo "✓ Field 'author' is properly formatted"
+            fi
+            
+            # Validate repository field if present (should be string, not object)
+            if jq -e ".repository" "$plugin_json" > /dev/null; then
+              if ! jq -e ".repository | type == \"string\"" "$plugin_json" > /dev/null; then
+                echo "✗ Field 'repository' must be a string URL, not an object"
+                exit 1
+              fi
+              echo "✓ Field 'repository' is properly formatted"
+            fi
+
+            # Check README exists
+            if [ ! -f "$plugin_path/README.md" ]; then
+              echo "⚠️  Warning: README.md not found (recommended)"
+            else
+              echo "✓ README.md exists"
+            fi
+            
+            # Check commands directory and validate command files
+            if [ -d "$plugin_path/commands" ]; then
+              echo "✓ Commands directory exists"
+              
+              # Find all markdown files in commands directory
+              command_files=$(find "$plugin_path/commands" -name "*.md" 2>/dev/null)
+              
+              if [ -n "$command_files" ]; then
+                for cmd_file in $command_files; do
+                  cmd_name=$(basename "$cmd_file")
+                  
+                  # Check if file has frontmatter (starts with ---)
+                  if head -n 1 "$cmd_file" | grep -q "^---$"; then
+                    echo "✓ Command '$cmd_name' has frontmatter"
+                  else
+                    echo "⚠️  Warning: Command '$cmd_name' missing frontmatter (recommended)"
+                  fi
+                done
+              fi
+            fi
+
+            echo "✓ Plugin $plugin_name is valid"
+          done
+
+          echo ""
+          echo "================================"
+          echo "✅ All plugins validated successfully!"
+
+  check-duplicates:
+    name: Check for Duplicate Plugin Names
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup jq
+        uses: dcarbone/install-jq-action@v2
+
+      - name: Check for duplicate names
+        run: |
+          echo "Checking for duplicate plugin names..."
+
+          duplicates=$(jq -r '.plugins[].name' .claude-plugin/marketplace.json | sort | uniq -d)
+
+          if [ -n "$duplicates" ]; then
+            echo "✗ Duplicate plugin names found:"
+            echo "$duplicates"
+            exit 1
+          fi
+
+          echo "✓ No duplicate plugin names"

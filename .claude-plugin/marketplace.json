@@ -1,0 +1,25 @@
+{
+  "name": "my-team-plugin-marketplace",
+  "owner": {
+    "name": "Your Organization",
+    "email": "team@your-org.com"
+  },
+  "metadata": {
+    "description": "A curated collection of Claude Code plugins for our team",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "hello-world",
+      "description": "A simple example plugin demonstrating basic Claude Code plugin functionality",
+      "version": "1.0.0",
+      "author": {
+        "name": "Your Team"
+      },
+      "source": "./plugins/hello-world",
+      "category": "examples",
+      "tags": ["example", "tutorial", "getting-started"],
+      "keywords": ["example", "tutorial", "getting-started"]
+    }
+  ]
+}

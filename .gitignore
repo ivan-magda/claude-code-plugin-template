@@ -1,0 +1,51 @@
+# Claude Code
+.claude/cache/
+.claude/logs/
+.claude/temp/
+*.log
+
+# OS Files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+
+# Dependencies
+node_modules/
+vendor/
+.pnp/
+.pnp.js
+
+# Environment
+.env
+.env.local
+.env.*.local
+secrets.json
+credentials.json
+
+# Build outputs
+dist/
+build/
+*.min.js
+*.min.css
+
+# Test coverage
+coverage/
+*.coverage
+.nyc_output/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Archives
+*.zip
+*.tar.gz
+*.rar

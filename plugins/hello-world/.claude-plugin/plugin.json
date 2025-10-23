@@ -1,0 +1,14 @@
+{
+  "name": "hello-world",
+  "version": "1.0.0",
+  "description": "A simple example plugin that demonstrates basic Claude Code plugin functionality",
+  "author": {
+    "name": "Your Team",
+    "email": "team@your-org.com",
+    "url": "https://github.com/your-org"
+  },
+  "homepage": "https://github.com/your-org/your-marketplace-name",
+  "repository": "https://github.com/your-org/your-marketplace-name",
+  "license": "MIT",
+  "keywords": ["example", "tutorial", "hello-world"]
+}
