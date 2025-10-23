@@ -152,7 +152,7 @@ The included GitHub Actions workflow validates:
 - Command files exist
 - No duplicate plugin names
 
-## 📝 Creating New Plugins
+## Creating New Plugins
 
 ### Step 1: Create Plugin Structure
 
@@ -239,21 +239,7 @@ Add to `.claude-plugin/marketplace.json`:
 
 **Note**: The marketplace plugin entry uses the same schema as `plugin.json` with all fields optional, plus marketplace-specific fields like `source`, `category`, and `tags`. The `author` field should be an object.
 
-### Step 5: Test Your Plugin
-
-```bash
-# Validate
-./scripts/validate.sh
-
-# Test
-./scripts/test-plugin.sh my-plugin
-
-# Try it in Claude Code
-claude
-/my-command
-```
-
-## 📚 Documentation
+## Documentation
 
 ### Official Claude Code Documentation
 
@@ -262,75 +248,6 @@ claude
 - **[Plugins Reference](https://docs.claude.com/en/docs/claude-code/plugins-reference)**: Technical specifications and schemas
 - **[Slash Commands](https://docs.claude.com/en/docs/claude-code/slash-commands)**: Command development details
 
-## 🤝 Contributing
-
-We welcome plugin contributions!
-
-### Submitting a Plugin
-
-1. Fork this repository
-2. Create your plugin in the `plugins/` directory
-3. Add it to `marketplace.json`
-4. Test locally
-5. Submit a pull request using the plugin submission template
-
-## 📋 Requirements
-
-- Claude Code installed and running
-- Git (for version control and GitHub integration)
-- Basic familiarity with JSON and Markdown formats
-
-## 🐛 Troubleshooting
-
-### Plugins Not Loading
-
-1. Verify marketplace.json syntax:
-   ```bash
-   jq . .claude-plugin/marketplace.json
-   ```
-
-2. Check plugin paths are correct:
-   ```bash
-   ls -la plugins/*/.claude-plugin/plugin.json
-   ```
-
-3. Validate settings:
-   ```bash
-   jq . .claude/settings.json
-   ```
-
-### Commands Not Found
-
-1. Ensure command files exist:
-   ```bash
-   find plugins -name "*.md"
-   ```
-
-2. Restart Claude Code
-
-### Validation Errors
-
-Run the validation script for detailed error messages:
-```bash
-./scripts/validate.sh
-```
-
-## 📄 License
+## License
 
 MIT License - see [LICENSE](LICENSE) file for details
-
-## 🙏 Acknowledgments
-
-- Built for the Claude Code community
-- Inspired by package managers and plugin systems
-- Thanks to all contributors
-
-## 📮 Support
-
-- **Issues**: Use GitHub Issues for bug reports and feature requests
-- **Discussions**: Use GitHub Discussions for questions and ideas
-- **Documentation**: Check the `docs/` directory for detailed guides
-
----
-
-**Ready to get started?** Click "Use this template" and create your own plugin marketplace!
