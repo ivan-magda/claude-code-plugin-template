@@ -29,6 +29,7 @@ This template provides:
   - Proper plugin manifest structure
   - Command with frontmatter
   - Best practices and documentation
+- **Comprehensive Documentation** (`docs/`): Complete guides for plugin development, hooks, settings, commands, skills, and sub-agents
 - **GitHub Actions**: Automated plugin validation workflow
 - **Complete Documentation**: Links to official Claude Code documentation
 
@@ -240,6 +241,21 @@ Add to `.claude-plugin/marketplace.json`:
 **Note**: The marketplace plugin entry uses the same schema as `plugin.json` with all fields optional, plus marketplace-specific fields like `source`, `category`, and `tags`. The `author` field should be an object.
 
 ## Documentation
+
+### Local Documentation
+
+This repository includes comprehensive documentation for the Claude Code plugin system in the [`docs/`](docs/) directory:
+
+- **[Plugin Development](docs/plugins.md)**: Complete guide to creating and managing plugins
+- **[Plugin Reference](docs/plugins-reference.md)**: Technical specifications and advanced features
+- **[Plugin Marketplaces](docs/plugin-marketplaces.md)**: Marketplace creation and management
+- **[Hooks](docs/hooks.md)**: Event-driven automation and workflows
+- **[Settings](docs/settings.md)**: Configuration and customization options
+- **[Slash Commands](docs/slash-commands.md)**: Command system and custom commands
+- **[Skills](docs/skills.md)**: Agent capabilities and expertise packages
+- **[Sub-Agents](docs/sub-agents.md)**: Specialized AI assistants and task delegation
+
+Start with [`docs/plugins.md`](docs/plugins.md) for plugin development basics, or [`docs/README.md`](docs/README.md) for a complete overview of all available documentation.
 
 ### Official Claude Code Documentation
 
