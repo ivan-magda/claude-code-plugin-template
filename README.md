@@ -47,37 +47,6 @@ This template provides:
 - **Comprehensive Documentation** (`docs/`): Complete guides for plugin development, hooks, settings, commands, skills, and sub-agents
 - **GitHub Actions**: Automated plugin validation workflow
 
-## Repository Structure
-
-```
-.
-├── .claude-plugin/
-│   └── marketplace.json               # Marketplace definition
-├── plugins/
-│   ├── hello-world/                   # Example: Basic plugin
-│   │   ├── .claude-plugin/
-│   │   │   └── plugin.json           # Plugin manifest
-│   │   ├── commands/
-│   │   │   └── hello.md               # Command definition
-│   │   └── README.md                  # Plugin documentation
-│   └── plugin-development/           # Plugin development toolkit
-│       ├── .claude-plugin/
-│       │   └── plugin.json           # Plugin manifest
-│       ├── commands/                 # 7 scaffolding commands
-│       ├── agents/                   # Reviewer agent
-│       ├── skills/                   # Plugin authoring skill
-│       ├── hooks/                   # Validation hooks
-│       ├── scripts/                  # Utility scripts
-│       └── README.md                # Plugin documentation
-├── .github/
-│   └── workflows/
-│       └── validate-plugins.yml       # CI/CD validation
-├── docs/                             # Local documentation
-├── .gitignore
-├── LICENSE
-└── README.md
-```
-
 ## Configuration
 
 ### Marketplace Configuration
