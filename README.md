@@ -154,8 +154,8 @@ This template includes a powerful `plugin-development` plugin that automates plu
 /plugin-development:init my-new-plugin
 
 # Add components as needed
-/plugin-development:add-command my-command Description
-/plugin-development:add-skill my-skill Use when...
+/plugin-development:add-command my-command "Description of what the command does"
+/plugin-development:add-skill my-skill "Use when working with..."
 /plugin-development:validate
 ```
 

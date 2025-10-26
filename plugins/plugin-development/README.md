@@ -50,13 +50,13 @@ This scaffolds:
 
 ```bash
 # Add a command
-/plugin-development:add-command format-code Format code according to project standards
+/plugin-development:add-command format-code "Format code according to project standards"
 
 # Add a skill
-/plugin-development:add-skill code-review Use when reviewing code or PRs
+/plugin-development:add-skill code-review "Use when reviewing code or PRs"
 
 # Add an agent
-/plugin-development:add-agent security-auditor Analyzes code for security vulnerabilities
+/plugin-development:add-agent security-auditor "Analyzes code for security vulnerabilities"
 
 # Add a hook
 /plugin-development:add-hook PreToolUse "Write|Edit"
@@ -157,10 +157,10 @@ cd my-plugin/
 ### 2. Add Components
 
 ```bash
-/plugin-development:add-command hello Greet the user
+/plugin-development:add-command hello "Greet the user"
 # Edit commands/hello.md with your instructions
 
-/plugin-development:add-skill my-expertise Use when working with X
+/plugin-development:add-skill my-expertise "Use when working with X"
 # Edit skills/my-expertise/SKILL.md
 ```
 
