@@ -140,14 +140,6 @@ Once published to GitHub, users can add your marketplace:
 /plugin install plugin-name@your-marketplace-name
 ```
 
-### CI/CD Testing
-
-The included GitHub Actions workflow validates:
-- JSON syntax in all plugin.json and marketplace.json files
-- Required fields are present
-- Command files exist
-- No duplicate plugin names
-
 ## Creating New Plugins
 
 ### Option 1: Use the Plugin Development Plugin (Recommended)
