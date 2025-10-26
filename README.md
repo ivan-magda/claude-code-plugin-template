@@ -18,20 +18,34 @@ A GitHub template repository for creating and managing your own Claude Code plug
    # Update marketplace metadata
    vim .claude-plugin/marketplace.json
    ```
-5. Test locally (see [Testing](#testing) section)
+
+5. Install the plugin development tools:
+   ```bash
+   # Add your local marketplace
+   /plugin marketplace add ./path-to-your-marketplace
+   
+   # Install the plugin-development plugin
+   /plugin install plugin-development@my-team-plugin-marketplace
+   ```
+
+6. Test locally (see [Testing](#testing) section)
 
 ## What's Included
 
 This template provides:
 
 - **Marketplace Configuration** (`.claude-plugin/marketplace.json`): Central registry for all plugins following the official schema
+- **Plugin Development Plugin** (`plugin-development`): Comprehensive toolkit for creating, validating, and managing plugins with:
+  - Scaffolding and component generation commands
+  - Automated validation and testing
+  - Best practices and documentation integration
+  - Review agent for release readiness
 - **Sample Plugin** (`hello-world`): Fully functional example demonstrating:
   - Proper plugin manifest structure
   - Command with frontmatter
   - Best practices and documentation
 - **Comprehensive Documentation** (`docs/`): Complete guides for plugin development, hooks, settings, commands, skills, and sub-agents
 - **GitHub Actions**: Automated plugin validation workflow
-- **Complete Documentation**: Links to official Claude Code documentation
 
 ## Repository Structure
 
@@ -40,15 +54,25 @@ This template provides:
 ├── .claude-plugin/
 │   └── marketplace.json               # Marketplace definition
 ├── plugins/
-│   └── hello-world/                   # Example: Basic plugin
+│   ├── hello-world/                   # Example: Basic plugin
+│   │   ├── .claude-plugin/
+│   │   │   └── plugin.json           # Plugin manifest
+│   │   ├── commands/
+│   │   │   └── hello.md               # Command definition
+│   │   └── README.md                  # Plugin documentation
+│   └── plugin-development/           # Plugin development toolkit
 │       ├── .claude-plugin/
-│       │   └── plugin.json            # Plugin manifest
-│       ├── commands/
-│       │   └── hello.md               # Command definition
-│       └── README.md                  # Plugin documentation
+│       │   └── plugin.json           # Plugin manifest
+│       ├── commands/                 # 7 scaffolding commands
+│       ├── agents/                   # Reviewer agent
+│       ├── skills/                   # Plugin authoring skill
+│       ├── hooks/                   # Validation hooks
+│       ├── scripts/                  # Utility scripts
+│       └── README.md                # Plugin documentation
 ├── .github/
 │   └── workflows/
 │       └── validate-plugins.yml       # CI/CD validation
+├── docs/                             # Local documentation
 ├── .gitignore
 ├── LICENSE
 └── README.md
@@ -120,11 +144,13 @@ When team members trust the repository folder, Claude Code automatically install
 4. **Install a plugin**:
    ```
    /plugin install hello-world@marketplace-name
+   /plugin install plugin-development@marketplace-name
    ```
 
 5. **Test commands**:
    ```
    /hello World
+   /plugin-development:validate
    ```
 
 6. **Verify installation**:
@@ -155,7 +181,26 @@ The included GitHub Actions workflow validates:
 
 ## Creating New Plugins
 
-### Step 1: Create Plugin Structure
+### Option 1: Use the Plugin Development Plugin (Recommended)
+
+This template includes a powerful `plugin-development` plugin that automates plugin scaffolding:
+
+```bash
+# After cloning and adding this marketplace
+/plugin install plugin-development@my-team-plugin-marketplace
+
+# Scaffold a new plugin
+/plugin-development:init my-new-plugin
+
+# Add components as needed
+/plugin-development:add-command my-command Description
+/plugin-development:add-skill my-skill Use when...
+/plugin-development:validate
+```
+
+See the [`plugin-development` README](plugins/plugin-development/README.md) for complete documentation.
+
+### Option 2: Manual Setup
 
 ```bash
 # Create plugin directory
@@ -167,7 +212,7 @@ touch plugins/my-plugin/.claude-plugin/plugin.json
 touch plugins/my-plugin/README.md
 ```
 
-### Step 2: Define Plugin Metadata
+#### Step 2: Define Plugin Metadata
 
 Edit `plugins/my-plugin/.claude-plugin/plugin.json`:
 
@@ -190,7 +235,7 @@ Edit `plugins/my-plugin/.claude-plugin/plugin.json`:
 
 **Note**: The `author` field must be an object with `name`, `email`, and optionally `url`. See the [Plugins Reference](https://docs.claude.com/en/docs/claude-code/plugins-reference#plugin-manifest-schema) for complete schema details.
 
-### Step 3: Create Command
+#### Step 3: Create Command
 
 Create `plugins/my-plugin/commands/my-command.md`:
 
@@ -215,7 +260,7 @@ argument-hint: [arg1] [arg2]
 
 **Note**: Commands should include frontmatter with `description` and optionally `argument-hint`. The content is a prompt that Claude executes. See the [Slash Commands documentation](https://docs.claude.com/en/docs/claude-code/slash-commands#plugin-commands) for details.
 
-### Step 4: Register in Marketplace
+#### Step 4: Register in Marketplace
 
 Add to `.claude-plugin/marketplace.json`:
 

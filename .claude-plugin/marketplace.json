@@ -20,6 +20,18 @@
       "category": "examples",
       "tags": ["example", "tutorial", "getting-started"],
       "keywords": ["example", "tutorial", "getting-started"]
+    },
+    {
+      "name": "plugin-development",
+      "description": "Assist with Claude Code plugin development: scaffold, validate, review, and team-ready distribution",
+      "version": "1.0.0",
+      "author": {
+        "name": "Ivan Magda"
+      },
+      "source": "./plugins/plugin-development",
+      "category": "developer-tools",
+      "tags": ["development", "plugins", "scaffold", "validation", "tools"],
+      "keywords": ["claude-code", "plugins", "developer-tools", "scaffold", "validation"]
     }
   ]
 }

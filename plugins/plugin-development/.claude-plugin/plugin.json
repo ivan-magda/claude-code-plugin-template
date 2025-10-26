@@ -1,0 +1,14 @@
+{
+  "name": "plugin-development",
+  "version": "1.0.0",
+  "description": "Assist with Claude Code plugin development: scaffold, validate, review, and team-ready distribution.",
+  "author": {
+    "name": "Ivan Magda",
+    "email": "ivan.magda@outlook.com",
+    "url": "https://github.com/ivan-magda"
+  },
+  "homepage": "https://github.com/ivan-magda/claude-code-plugin-template",
+  "repository": "https://github.com/ivan-magda/claude-code-plugin-template",
+  "license": "MIT",
+  "keywords": ["claude-code", "plugins", "developer-tools", "scaffold", "validation"]
+}
