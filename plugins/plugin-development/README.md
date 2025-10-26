@@ -6,10 +6,10 @@ A comprehensive Claude Code plugin that assists developers in creating, validati
 
 The `plugin-development` plugin provides a complete toolkit for plugin authorship using a hybrid architecture:
 
-- ** Skill (plugin-authoring)**: Ambient, auto-discovered guidance with progressive disclosure
-- ** 7 Slash Commands**: Explicit actions for scaffolding, validation, and testing
-- ** Reviewer Agent**: Deep, multi-file audits and readiness checks
-- ** Hooks**: Automated validation and formatting guardrails
+- **Skill (plugin-authoring)**: Ambient, auto-discovered guidance with progressive disclosure
+- **7 Slash Commands**: Explicit actions for scaffolding, validation, and testing
+- **Reviewer Agent**: Deep, multi-file audits and readiness checks
+- **Hooks**: Automated validation and formatting guardrails
 
 ## Installation
 
