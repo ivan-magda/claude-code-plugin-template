@@ -53,9 +53,14 @@ The `marketplace.json` file defines a collection of plugins that users can insta
 
 ### Marketplace Level
 
-- **metadata**: Object with `description`, `version`, etc.
+- **metadata**: Object with:
+  - **description**: Brief marketplace description
+  - **version**: Marketplace version
+  - **pluginRoot**: Base path for relative plugin sources (allows resolving relative plugin paths)
 
 ### Plugin Entry
+
+**Standard metadata fields:**
 
 - **description**: Brief description
 - **version**: SemVer version
@@ -66,6 +71,14 @@ The `marketplace.json` file defines a collection of plugins that users can insta
 - **homepage**: Plugin homepage URL
 - **repository**: Plugin repository URL
 - **license**: License identifier (e.g., "MIT")
+- **strict**: Boolean (default: true) - Require plugin.json in plugin folder
+
+**Component configuration fields:**
+
+- **commands**: String or array - Custom paths to command files or directories
+- **agents**: String or array - Custom paths to agent files
+- **hooks**: String or object - Custom hooks configuration or path to hooks file
+- **mcpServers**: String or object - MCP server configurations or path to MCP config
 
 ## Source Types
 
@@ -79,9 +92,33 @@ The `marketplace.json` file defines a collection of plugins that users can insta
 
 ### Git Repository
 
+Simple string format:
+
 ```json
 {
   "source": "https://github.com/user/repo"
+}
+```
+
+Object format for advanced configuration:
+
+```json
+{
+  "source": {
+    "source": "github",
+    "repo": "owner/plugin-repo"
+  }
+}
+```
+
+### Git URL Source
+
+```json
+{
+  "source": {
+    "source": "url",
+    "url": "https://gitlab.com/team/plugin.git"
+  }
 }
 ```
 
@@ -159,6 +196,56 @@ The `marketplace.json` file defines a collection of plugins that users can insta
   ]
 }
 ```
+
+### Advanced Plugin Entry
+
+Plugin entries can override default component locations and provide inline configuration:
+
+```json
+{
+  "name": "enterprise-tools",
+  "source": {
+    "source": "github",
+    "repo": "company/enterprise-plugin"
+  },
+  "description": "Enterprise workflow automation tools",
+  "version": "2.1.0",
+  "author": {
+    "name": "Enterprise Team",
+    "email": "enterprise@company.com"
+  },
+  "homepage": "https://docs.company.com/plugins/enterprise-tools",
+  "repository": "https://github.com/company/enterprise-plugin",
+  "license": "MIT",
+  "keywords": ["enterprise", "workflow", "automation"],
+  "category": "productivity",
+  "commands": [
+    "./commands/core/",
+    "./commands/enterprise/",
+    "./commands/experimental/preview.md"
+  ],
+  "agents": [
+    "./agents/security-reviewer.md",
+    "./agents/compliance-checker.md"
+  ],
+  "hooks": "./config/hooks.json",
+  "mcpServers": {
+    "enterprise-db": {
+      "command": "${CLAUDE_PLUGIN_ROOT}/servers/db-server",
+      "args": ["--config", "${CLAUDE_PLUGIN_ROOT}/config.json"]
+    }
+  },
+  "strict": false
+}
+```
+
+<Note>
+**Schema relationship**: Plugin entries are based on the *plugin manifest schema* (with all fields made optional) plus marketplace-specific fields (`source`, `strict`, `category`, `tags`). This means any field valid in a `plugin.json` file can also be used in a marketplace entry. When `strict: false`, the marketplace entry serves as the complete plugin manifest if no `plugin.json` exists. When `strict: true` (default), marketplace fields supplement the plugin's own manifest file.
+</Note>
+
+<Note>
+**Environment variables**: Use `${CLAUDE_PLUGIN_ROOT}` in hooks and mcpServers configurations. This variable resolves to the plugin's installation directory and ensures paths work correctly regardless of where the plugin is installed.
+</Note>
 
 ## Usage
 
