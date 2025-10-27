@@ -32,20 +32,25 @@ Activate whenever context includes `.claude-plugin/`, `plugin.json`, `marketplac
 ### Component Checklist
 
 ```
-□ .claude-plugin/plugin.json exists
-□ Component dirs at plugin root (not inside .claude-plugin/)
+□ .claude-plugin/plugin.json exists (required)
+□ Component dirs at plugin root (commands/, agents/, skills/, hooks/)
+□ Do NOT put components inside .claude-plugin/ directory
 □ Commands use kebab-case naming
-□ Skills have valid SKILL.md frontmatter
-□ Hooks use ${CLAUDE_PLUGIN_ROOT} for paths
+□ Skills have valid frontmatter (name + description required)
+□ Skills name matches directory (lowercase-hyphenated, max 64 chars)
+□ Hooks use ${CLAUDE_PLUGIN_ROOT} for paths (not relative paths)
+□ All scripts are executable (chmod +x)
 ```
 
 ### Release Checklist
 
 ```
 □ plugin.json: name/version/keywords present
-□ commands/agents/skills/hooks paths resolve
-□ local marketplace installs cleanly
-□ docs: README + examples linked
+□ Do NOT include standard paths in component fields
+□ Local marketplace installs cleanly
+□ Validate with /plugin-development:validate
+□ Test all commands, skills, and hooks
+□ README.md exists with usage examples
 ```
 
 ## Playbooks
@@ -75,16 +80,19 @@ Activate whenever context includes `.claude-plugin/`, `plugin.json`, `marketplac
 ### Adding a Skill
 
 1. Run `/plugin-development:add-skill <name> <when-to-use>`
-2. Edit `skills/<name>/SKILL.md`
-3. Add frontmatter: `name` (required), `description` (required), `allowed-tools` (optional)
-4. Keep SKILL.md concise; place details in sibling files
+2. Edit `skills/<name>/SKILL.md` with your instructions
+3. **Frontmatter requirements**:
+   - `name`: lowercase, hyphenated, max 64 chars (required)
+   - `description`: include both WHAT the Skill does AND WHEN to use it, max 1024 chars (required)
+   - `allowed-tools`: comma-separated list of tools (optional, restricts tool access)
+4. Keep SKILL.md concise; place details in sibling files (reference.md, examples.md, scripts/)
 
 ### Troubleshooting
 
-- **Plugin not loading?** Check `plugin.json` paths are relative to plugin root
-- **Commands not showing?** Verify `commands` field points to `./commands/`
-- **Hooks not running?** Ensure scripts are executable (`chmod +x`)
-- **Skill not triggering?** Check `name` matches directory and is lowercase-hyphenated
+- **Plugin not loading?** Check `plugin.json` paths are relative to plugin root. Do NOT include `commands`, `agents`, `skills`, or `hooks` fields for standard directories.
+- **Commands not showing?** Verify `commands/` directory exists at plugin root with `.md` files. Do NOT add `commands` field to `plugin.json` for standard paths.
+- **Hooks not running?** Ensure scripts are executable (`chmod +x`) and use `${CLAUDE_PLUGIN_ROOT}` for paths
+- **Skill not triggering?** Check `name` matches directory and is lowercase-hyphenated (max 64 chars). Ensure `description` includes both what and when to use (max 1024 chars)
 
 ## Notes
 
