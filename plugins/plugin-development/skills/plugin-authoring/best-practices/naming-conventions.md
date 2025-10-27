@@ -61,19 +61,28 @@ Files: `command-name.md`
 
 ### Command Invocation
 
-Format: `/plugin-name:command-name`
+Commands can be invoked with or without the plugin prefix:
 
-Examples:
+**Full format**: `/plugin-name:command-name`
+
+**Examples**:
 - `/plugin-development:init`
 - `/git-workflow:commit-push`
 - `/test-runner:run-all`
 
 ### Namespacing
 
+**Plugin prefix is optional** unless there are name conflicts. When no conflict exists, you can use the command directly:
+
+- Direct: `/format-code` (when no conflict)
+- Prefixed: `/my-tools:format-code` (when needed for disambiguation)
+
 Commands are automatically namespaced by plugin name:
 - Plugin: `my-tools`
 - Command file: `format.md`
-- Invocation: `/my-tools:format`
+- Invocation options:
+  - `/format` (if no other plugin has this command)
+  - `/my-tools:format` (when needed to disambiguate)
 
 This prevents conflicts between plugins.
 
@@ -114,7 +123,7 @@ File: `SKILL.md` (always uppercase)
 
 ### Frontmatter Name
 
-Must match directory name:
+Should match directory name (recommended for consistency):
 
 ```markdown
 ---
@@ -123,11 +132,13 @@ description: ...
 ---
 ```
 
-❌ **Wrong**:
+❌ **Poor practice**:
 ```
 Directory: plugin-authoring/
-Frontmatter: name: PluginAuthoring  # Doesn't match!
+Frontmatter: name: PluginAuthoring  # Doesn't match! Use kebab-case
 ```
+
+**Note**: While the `name` field in frontmatter is what Claude uses to discover and reference Skills, having it match the directory name prevents confusion and follows best practices.
 
 ### Skill Naming Tips
 
