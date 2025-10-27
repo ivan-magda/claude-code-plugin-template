@@ -13,25 +13,60 @@ The `plugin-development` plugin provides a complete toolkit for plugin authorshi
 
 ## Installation
 
-### From This Marketplace
+This plugin is part of the **Claude Code Plugin Marketplace Template**. To use it:
+
+### Quick Start (Recommended for First-Time Users)
 
 ```bash
-/plugin install plugin-development@my-team-plugin-marketplace
-```
-
-### From Local Development
-
-```bash
-# Add this marketplace
-/plugin marketplace add /path/to/claude-code-plugin-template
+# From the template root directory
+/plugin marketplace add .
 
 # Install the plugin
-/plugin install plugin-development@my-team-plugin-marketplace
+/plugin install plugin-development@claude-code-plugin-template
+```
+
+### For Team Marketplaces
+
+If you're using this template to create your own marketplace:
+
+1. **Set up your marketplace** (see the [main README](../../README.md) for instructions)
+2. **Add your marketplace to Claude Code**:
+   ```bash
+   /plugin marketplace add your-org/your-marketplace-repo
+   ```
+3. **Install the plugin**:
+   ```bash
+   /plugin install plugin-development@your-marketplace-name
+   ```
+
+### Local Development Setup
+
+If you want to use this for developing new plugins:
+
+```bash
+# From the template root directory
+cd /path/to/claude-code-plugin-template
+
+# Add the marketplace
+/plugin marketplace add .
+
+# Install this plugin
+/plugin install plugin-development@claude-code-plugin-template
+```
+
+Then use it to scaffold new plugins:
+
+```bash
+/plugin-development:init my-new-plugin
 ```
 
 ## Quick Start
 
+> **Before you begin**: Make sure you've installed this plugin following the [Installation](#installation) instructions above.
+
 ### Create a New Plugin
+
+Once installed, you can scaffold a new plugin:
 
 ```bash
 /plugin-development:init my-awesome-plugin
@@ -77,11 +112,14 @@ Checks:
 
 ### Test Locally
 
+After creating your plugin and making it available in a marketplace:
+
 ```bash
+# From your plugin directory
 /plugin-development:test-local
 ```
 
-Creates a dev marketplace and provides installation instructions for iterative testing.
+This creates a dev marketplace and provides installation instructions for iterative testing. See the [Testing Your Plugin](#testing-your-plugin) section below for complete workflow details.
 
 ## Commands Reference
 
@@ -146,7 +184,27 @@ Automated validation and formatting hooks are included:
 
 ## Development Workflow
 
+### Prerequisites
+
+Before starting plugin development:
+
+1. **Clone or download this template**:
+   ```bash
+   git clone https://github.com/your-org/claude-code-plugin-template.git
+   cd claude-code-plugin-template
+   ```
+
+2. **Install this plugin** (see [Installation](#installation) above)
+
+3. **Create a new plugin**:
+   ```bash
+   /plugin-development:init my-plugin
+   cd my-plugin/
+   ```
+
 ### 1. Initialize
+
+Once installed, create your plugin:
 
 ```bash
 cd my-projects/
@@ -364,7 +422,8 @@ MIT License - See LICENSE file for details
 ## Support
 
 For issues or questions:
-- Check validation output: `/plugin-development:validate`
-- Review best practices in `skills/plugin-authoring/best-practices/`
-- Request deep audit: `/agents plugin-reviewer`
-- Test with debug mode: `claude --debug`
+- **Using the template**: See the [main README](../../README.md) for template setup instructions
+- **Plugin issues**: Check validation output: `/plugin-development:validate`
+- **Best practices**: Review `skills/plugin-authoring/best-practices/`
+- **Deep audit**: Request deep audit: `/agents plugin-reviewer`
+- **Debug mode**: Test with debug mode: `claude --debug`
