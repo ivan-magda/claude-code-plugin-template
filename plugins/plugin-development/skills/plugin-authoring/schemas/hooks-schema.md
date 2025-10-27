@@ -99,21 +99,68 @@ Runs when Claude Code session starts.
 }
 ```
 
-**Note**: SessionStart stdout is only visible if it starts with special markers (see docs).
+**Matchers**:
+- `startup` - Invoked from startup
+- `resume` - Invoked from `--resume`, `--continue`, or `/resume`
+- `clear` - Invoked from `/clear`
+- `compact` - Invoked from auto or manual compact
+
+**Note**: SessionStart stdout is added to context automatically for Claude.
+
+### SessionEnd
+
+Runs when a Claude Code session ends.
+
+```json
+{
+  "SessionEnd": [
+    {
+      "hooks": [
+        {
+          "type": "command",
+          "command": "${CLAUDE_PLUGIN_ROOT}/scripts/cleanup.sh"
+        }
+      ]
+    }
+  ]
+}
+```
 
 ### UserPromptSubmit
 
-Runs when user submits a prompt (experimental).
+Runs when user submits a prompt. Can block prompt processing.
 
 ```json
 {
   "UserPromptSubmit": [
     {
-      "matcher": ".*",
       "hooks": [
         {
           "type": "command",
           "command": "${CLAUDE_PLUGIN_ROOT}/scripts/context-injector.sh"
+        }
+      ]
+    }
+  ]
+}
+```
+
+**Exit codes**:
+- `0`: Allow (stdout added to context)
+- `2`: **Block** (stderr shown to user)
+
+### Stop / SubagentStop
+
+Runs when Claude attempts to stop (main agent or subagent).
+
+```json
+{
+  "Stop": [
+    {
+      "hooks": [
+        {
+          "type": "command",
+          "command": "${CLAUDE_PLUGIN_ROOT}/scripts/check-continuation.sh"
         }
       ]
     }
@@ -126,8 +173,8 @@ Runs when user submits a prompt (experimental).
 Available in hook commands:
 
 - `${CLAUDE_PLUGIN_ROOT}`: Absolute path to plugin root
-- `${CLAUDE_WORKING_DIR}`: Current working directory
-- Standard env vars from shell
+- `${CLAUDE_PROJECT_DIR}`: Project root directory (where Claude Code started)
+- Standard shell environment variables
 
 ## Timeouts
 
@@ -164,6 +211,15 @@ if [ validation_fails ]; then
   exit 2  # Block the tool
 fi
 exit 0  # Allow
+```
+
+**Advanced JSON output** (alternative to exit codes):
+```json
+{
+  "permissionDecision": "deny",
+  "permissionDecisionReason": "File violates security policy",
+  "suppressOutput": true
+}
 ```
 
 ### Formatting Hook (Non-blocking)
@@ -206,11 +262,12 @@ exit 0  # Allow
 ## Best Practices
 
 - **Use `${CLAUDE_PLUGIN_ROOT}`** for portable paths
-- **Set timeouts** to prevent hanging
-- **Exit code 2** to block (PreToolUse only)
+- **Set timeouts** to prevent hanging (10-30 seconds recommended)
+- **Exit code 2** to block (PreToolUse/UserPromptSubmit)
 - **Keep scripts fast** (< 1 second ideally)
 - **Make scripts executable** (`chmod +x`)
 - **Test hooks** before distributing
+- **Handle JSON output** for advanced control (see advanced examples)
 
 ## Common Mistakes
 
@@ -231,7 +288,7 @@ exit 0  # Allow
 ❌ **No timeout** on slow operations
 ```json
 {
-  "command": "npm install",
+  "command": "npm install"
   // Missing timeout!
 }
 ```
@@ -241,6 +298,29 @@ exit 0  # Allow
 {
   "command": "npm install",
   "timeout": 300000
+}
+```
+
+❌ **Missing required matcher**
+```json
+{
+  "SessionStart": [
+    {
+      "hooks": [...]  // No matcher!
+    }
+  ]
+}
+```
+
+✅ **Include appropriate matcher**
+```json
+{
+  "SessionStart": [
+    {
+      "matcher": "startup",
+      "hooks": [...]
+    }
+  ]
 }
 ```
 
