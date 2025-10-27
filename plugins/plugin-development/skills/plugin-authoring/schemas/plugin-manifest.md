@@ -10,15 +10,11 @@ The `plugin.json` file in `.claude-plugin/` defines your plugin's metadata and o
 
 ```json
 {
-  "name": "plugin-name",
-  "version": "1.0.0",
-  "description": "What your plugin does"
+  "name": "plugin-name"
 }
 ```
 
-- **name**: kebab-case string, unique identifier
-- **version**: SemVer format (e.g., "1.0.0")
-- **description**: Brief, user-facing description
+- **name**: kebab-case string, unique identifier (REQUIRED)
 
 ## Optional Fields
 
@@ -26,6 +22,8 @@ The `plugin.json` file in `.claude-plugin/` defines your plugin's metadata and o
 
 ```json
 {
+  "version": "1.0.0",
+  "description": "What your plugin does",
   "author": {
     "name": "Your Name",
     "email": "you@example.com",
@@ -37,6 +35,14 @@ The `plugin.json` file in `.claude-plugin/` defines your plugin's metadata and o
   "keywords": ["tag1", "tag2"]
 }
 ```
+
+- **version**: Semantic version format (optional metadata)
+- **description**: Brief explanation of plugin purpose (optional metadata)
+- **author**: Can be string or object with name, email, url
+- **homepage**: Documentation URL (optional metadata)
+- **repository**: Source code URL (optional metadata)
+- **license**: License identifier like "MIT" (optional metadata)
+- **keywords**: Array of tags for discovery (optional metadata)
 
 ### Component Configuration (Custom Paths Only)
 
@@ -58,22 +64,110 @@ The `plugin.json` file in `.claude-plugin/` defines your plugin's metadata and o
 
 ### Component Path Rules
 
-- **commands**: Array of paths to individual `.md` command files, OR directory path
-- **agents**: Array of paths to individual `.md` agent files (NOT a directory)
-- **hooks**: Path to `hooks.json` configuration file
-- **mcpServers**: MCP server configurations or path to MCP config file
+- **commands**: Array of paths to individual `.md` command files, OR string path to a directory
+- **agents**: Array of paths to individual `.md` agent files (NOT a directory path)
+- **hooks**: Path to `hooks.json` configuration file OR inline hooks object
+- **mcpServers**: MCP server configurations object OR path to MCP config file
 
-All paths must be **relative to plugin root** (where `.claude-plugin/` lives)
+All paths must be **relative to plugin root** (where `.claude-plugin/` lives) and start with `./`
 
-### Author Field
+**Note**: Custom paths supplement default directories - they don't replace them. If `commands/` exists, it's loaded in addition to custom command paths.
 
-Can be either:
-- **String**: `"author": "Your Name"`
-- **Object**: `"author": { "name": "Your Name", "email": "...", "url": "..." }`
+### Skills Configuration
+
+For Skills (Agent Skills) provided by your plugin, you can restrict which tools Claude can use:
+
+```json
+{
+  "name": "my-skill-plugin",
+  "skills": [
+    {
+      "name": "safe-reader",
+      "allowed-tools": ["Read", "Grep", "Glob"]
+    }
+  ]
+}
+```
+
+However, the recommended approach is to specify `allowed-tools` directly in the `SKILL.md` frontmatter:
+
+```yaml
+---
+name: safe-reader
+description: Read files without making changes
+allowed-tools: Read, Grep, Glob
+---
+```
+
+### Environment Variables
+
+**`${CLAUDE_PLUGIN_ROOT}`** is a special environment variable available in your plugin that contains the absolute path to your plugin directory. Use this in hooks, MCP servers, and scripts to ensure correct paths regardless of installation location.
+
+```json
+{
+  "name": "my-plugin",
+  "hooks": "./hooks/hooks.json"
+}
+```
+
+Where `hooks/hooks.json` contains:
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/format-code.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Or inline hooks:
+
+```json
+{
+  "name": "my-plugin",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/format.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Use `${CLAUDE_PLUGIN_ROOT}` for:
+- Scripts executed by hooks
+- MCP server paths
+- Config files referenced by components
+- Any file paths in your plugin configuration
 
 ## Examples
 
 ### Standard Directory Structure (Recommended)
+
+```json
+{
+  "name": "my-dev-tools"
+}
+```
+
+**Minimal plugin** - The simplest possible plugin. Claude Code automatically discovers `commands/`, `agents/`, `skills/`, and `hooks/` directories.
 
 ```json
 {
@@ -89,14 +183,13 @@ Can be either:
 }
 ```
 
-**Note**: No component fields needed. Claude Code automatically discovers `commands/`, `agents/`, `skills/`, and `hooks/` directories.
+**With metadata** - Adding optional metadata for better discovery and documentation.
 
 ### Custom Paths
 
 ```json
 {
   "name": "enterprise-plugin",
-  "version": "1.0.0",
   "description": "Enterprise development tools",
   "author": {
     "name": "Your Name"
@@ -111,6 +204,8 @@ Can be either:
   ]
 }
 ```
+
+**Note**: Using custom paths to organize components. The `description` and `author` fields are optional metadata.
 
 ## Common Mistakes
 
