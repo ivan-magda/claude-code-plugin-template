@@ -14,7 +14,7 @@ plugin-name/
 ├── agents/                   # Sub-agents (*.md)
 ├── skills/                   # Skills (folders with SKILL.md)
 ├── hooks/                    # Hook configurations
-│   └── hooks.json
+│   └── hooks.json            # Main hook config file
 ├── scripts/                  # Hook scripts, utilities
 └── README.md                 # User-facing documentation
 ```
@@ -24,8 +24,10 @@ plugin-name/
 1. **Manifest isolation**: Only `plugin.json` goes in `.claude-plugin/`
 2. **Component separation**: Keep commands, agents, skills, and hooks in separate directories
 3. **Relative paths**: All paths in manifests are relative to plugin root
-4. **Flat commands**: Command files go directly in `commands/`, not subdirectories
-5. **Nested skills**: Skills are folders with `SKILL.md` + support files
+4. **Default directories**: Standard directories (`commands/`, `agents/`, `skills/`, `hooks/`) are automatically discovered
+5. **Flat commands**: Command files go directly in `commands/`, not subdirectories (unless using custom paths)
+6. **Nested skills**: Skills are folders with `SKILL.md` + support files
+7. **Custom paths**: Use component fields in `plugin.json` only for non-standard locations
 
 ## File Naming
 
@@ -124,14 +126,36 @@ Commands are invoked as `/plugin-name:git-commit`, etc.
 
 ### Simple Hooks
 
+Hooks configuration goes in `hooks/hooks.json`:
+
 ```
 hooks/
 └── hooks.json
 ```
 
+Alternatively, hooks can be defined inline in `plugin.json` or specified via the `hooks` field:
+
+```json
+{
+  "name": "my-plugin",
+  "hooks": "./hooks/hooks.json"
+}
+```
+
+Or inline configuration:
+
+```json
+{
+  "name": "my-plugin",
+  "hooks": {
+    "PostToolUse": [...]
+  }
+}
+```
+
 ### Complex Hooks
 
-With multiple scripts:
+With multiple scripts, organize them under `hooks/scripts/`:
 
 ```
 hooks/
@@ -142,11 +166,23 @@ hooks/
     └── session-start-info.sh
 ```
 
-Reference scripts from hooks.json:
+Reference scripts using the `${CLAUDE_PLUGIN_ROOT}` environment variable:
 
 ```json
 {
-  "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/pre-write-validation.sh"
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/pre-write-validation.sh"
+          }
+        ]
+      }
+    ]
+  }
 }
 ```
 
@@ -330,7 +366,7 @@ commands/            # At root
 hooks/               # At root
 ```
 
-### ❌ Don't: Component Fields for Standard Paths
+### ❌ Don't: Specify Default Paths in Manifest
 
 ```json
 {
@@ -340,7 +376,7 @@ hooks/               # At root
 }
 ```
 
-### ✅ Do: Omit Component Fields for Standard Paths
+### ✅ Do: Omit Component Fields When Using Default Directories
 
 ```json
 {
@@ -348,7 +384,10 @@ hooks/               # At root
 }
 ```
 
-**Note**: Only include component fields when using custom (non-standard) paths.
+When using standard directories (`commands/`, `agents/`, `skills/`, `hooks/`), they are automatically discovered and you don't need to specify them in `plugin.json`. Only use component fields (`commands`, `agents`, etc.) when:
+1. Using non-standard directory names (e.g., `./custom-commands/`)
+2. Including specific individual files (e.g., `["./commands/special.md"]`)
+3. Combining custom paths with default paths
 
 ### ❌ Don't: Absolute Paths
 
@@ -386,12 +425,15 @@ Quick Links:
 
 ```
 □ Manifest isolated in .claude-plugin/
-□ Components at plugin root
+□ Components at plugin root (not inside .claude-plugin/)
+□ Default directories (commands/, agents/, skills/, hooks/) are automatically discovered
+□ Component fields in plugin.json only when using custom paths
 □ Kebab-case naming throughout
-□ Relative paths in all configs
+□ Relative paths in all configs (start with ./)
 □ Skills use progressive disclosure
 □ Commands are focused (< 200 lines)
 □ Scripts are executable
+□ Hooks reference scripts using ${CLAUDE_PLUGIN_ROOT}
 □ README.md documents usage
 □ Version follows SemVer
 □ CHANGELOG.md tracks changes
