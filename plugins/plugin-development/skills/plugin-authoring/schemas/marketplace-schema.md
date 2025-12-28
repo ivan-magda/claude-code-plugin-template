@@ -79,6 +79,7 @@ The `marketplace.json` file defines a collection of plugins that users can insta
 - **agents**: String or array - Custom paths to agent files
 - **hooks**: String or object - Custom hooks configuration or path to hooks file
 - **mcpServers**: String or object - MCP server configurations or path to MCP config
+- **lspServers**: String or object - LSP server configurations or path to LSP config
 
 ## Source Types
 
@@ -90,17 +91,9 @@ The `marketplace.json` file defines a collection of plugins that users can insta
 }
 ```
 
-### Git Repository
+### GitHub Repository
 
-Simple string format:
-
-```json
-{
-  "source": "https://github.com/user/repo"
-}
-```
-
-Object format for advanced configuration:
+Object format (recommended):
 
 ```json
 {
@@ -111,7 +104,25 @@ Object format for advanced configuration:
 }
 ```
 
+With optional `ref` (branch/tag) and `path` (subdirectory) fields:
+
+```json
+{
+  "source": {
+    "source": "github",
+    "repo": "owner/plugin-repo",
+    "ref": "v2.0",
+    "path": "plugins/my-plugin"
+  }
+}
+```
+
+- **ref**: Optional - Git reference (branch, tag, or commit)
+- **path**: Optional - Subdirectory within the repository
+
 ### Git URL Source
+
+For non-GitHub git repositories (GitLab, Bitbucket, self-hosted):
 
 ```json
 {
@@ -119,14 +130,6 @@ Object format for advanced configuration:
     "source": "url",
     "url": "https://gitlab.com/team/plugin.git"
   }
-}
-```
-
-### Git with Subdirectory
-
-```json
-{
-  "source": "https://github.com/user/repo/tree/main/plugins/my-plugin"
 }
 ```
 
@@ -235,6 +238,13 @@ Plugin entries can override default component locations and provide inline confi
       "args": ["--config", "${CLAUDE_PLUGIN_ROOT}/config.json"]
     }
   },
+  "lspServers": {
+    "custom-lsp": {
+      "command": "${CLAUDE_PLUGIN_ROOT}/lsp/server",
+      "args": ["--config", "${CLAUDE_PLUGIN_ROOT}/lsp-config.json"],
+      "languages": ["python", "javascript"]
+    }
+  },
   "strict": false
 }
 ```
@@ -244,7 +254,7 @@ Plugin entries can override default component locations and provide inline confi
 </Note>
 
 <Note>
-**Environment variables**: Use `${CLAUDE_PLUGIN_ROOT}` in hooks and mcpServers configurations. This variable resolves to the plugin's installation directory and ensures paths work correctly regardless of where the plugin is installed.
+**Environment variables**: Use `${CLAUDE_PLUGIN_ROOT}` in hooks, mcpServers, and lspServers configurations. This variable resolves to the plugin's installation directory and ensures paths work correctly regardless of where the plugin is installed.
 </Note>
 
 ## Usage
@@ -353,6 +363,64 @@ In project `.claude/settings.json`:
   "source": "./plugins/my-plugin"
 }
 ```
+
+## Enterprise Marketplace Restrictions
+
+Enterprises can restrict which plugin marketplaces users can add using the `strictKnownMarketplaces` managed setting. This setting is configured in managed settings and cannot be overridden by users.
+
+### strictKnownMarketplaces Setting
+
+| Value | Behavior |
+|-------|----------|
+| Undefined (default) | No restrictions. Users can add any marketplace |
+| Empty array `[]` | Complete lockdown. Users cannot add new marketplaces |
+| List of sources | Users can only add allowlisted marketplaces |
+
+### Disable All Marketplace Additions
+
+```json
+{
+  "strictKnownMarketplaces": []
+}
+```
+
+### Allow Specific Marketplaces Only
+
+```json
+{
+  "strictKnownMarketplaces": [
+    {
+      "source": "github",
+      "repo": "acme-corp/approved-plugins"
+    },
+    {
+      "source": "github",
+      "repo": "acme-corp/security-tools",
+      "ref": "v2.0"
+    },
+    {
+      "source": "url",
+      "url": "https://plugins.example.com/marketplace.json"
+    }
+  ]
+}
+```
+
+**Validation:** Exact matching is required. For GitHub sources, `repo` is required; `ref` or `path` must match if specified. For URLs, the full URL must match exactly.
+
+## Reserved Marketplace Names
+
+The following marketplace names are reserved for official Anthropic use and cannot be used by third-party marketplaces:
+
+- `claude-code-marketplace`
+- `claude-code-plugins`
+- `claude-plugins-official`
+- `anthropic-marketplace`
+- `anthropic-plugins`
+- `agent-skills`
+- `life-sciences`
+
+Names that impersonate official marketplaces (e.g., `official-claude-plugins`, `anthropic-tools-v2`) are also blocked.
 
 ## Validation
 
