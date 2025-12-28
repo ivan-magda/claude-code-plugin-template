@@ -1,12 +1,14 @@
 ---
 name: plugin-authoring
-description: Expert guidance for Claude Code plugin development. Use when creating or modifying plugins, working with plugin.json or marketplace.json, or adding commands, agents, Skills, or hooks.
+description: Use when creating, modifying, or debugging Claude Code plugins. Triggers on .claude-plugin/, plugin.json, marketplace.json, commands/, agents/, skills/, hooks/ directories. Provides schemas, templates, validation workflows, and troubleshooting.
 allowed-tools: Read, Grep, Glob
 ---
 
 # Plugin Authoring (Skill)
 
 You are the canonical guide for Claude Code plugin development. Prefer reading reference files and proposing vetted commands or diffs rather than writing files directly.
+
+**Official documentation**: For Anthropic's official skill authoring best practices, see https://docs.anthropic.com/en/docs/agents-and-tools/agent-skills/skill-authoring-best-practices
 
 ## Triggers & Scope
 
@@ -26,6 +28,8 @@ Activate whenever context includes `.claude-plugin/`, `plugin.json`, `marketplac
 - **Templates**: [templates/](templates/)
 - **Examples**: [examples/](examples/)
 - **Best practices**: [best-practices/](best-practices/)
+- **Common mistakes**: [best-practices/common-mistakes.md](best-practices/common-mistakes.md)
+- **Testing this skill**: [testing-plugin-authoring.md](testing-plugin-authoring.md)
 
 ## Checklists
 
@@ -57,6 +61,30 @@ Activate whenever context includes `.claude-plugin/`, `plugin.json`, `marketplac
 □ Test all commands, skills, and hooks
 □ README.md exists with usage examples
 ```
+
+## Red Flags (STOP If You're About To...)
+
+- Put `commands/`, `agents/`, `skills/`, or `hooks/` inside `.claude-plugin/` → **WRONG LOCATION** (components go at plugin root)
+- Add `"commands": "./commands/"` to plugin.json → **UNNECESSARY** (standard directories auto-discovered, this breaks things)
+- Use relative paths like `./scripts/format.sh` in hooks → **USE** `${CLAUDE_PLUGIN_ROOT}/scripts/format.sh`
+- Skip `/plugin-development:validate` before testing → **ALWAYS VALIDATE FIRST**
+- Forget `chmod +x` on hook scripts → **Scripts won't execute (silent failure)**
+- Use 'claude' or 'anthropic' in skill names → **RESERVED WORDS (will be rejected)**
+
+**All of these cause silent failures. When in doubt, validate.**
+
+For detailed explanations: [best-practices/common-mistakes.md](best-practices/common-mistakes.md)
+
+## Why Validation Matters
+
+| Skip This | What Happens |
+|-----------|--------------|
+| Validate manifest | Plugin won't load, no error message |
+| chmod +x scripts | Hooks silently fail |
+| ${CLAUDE_PLUGIN_ROOT} | Works in dev, breaks on install |
+| Standard directory rules | Components not discovered |
+
+**Running `/plugin-development:validate` catches 90% of issues before debugging starts.**
 
 ## Playbooks
 
