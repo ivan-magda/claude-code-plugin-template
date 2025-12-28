@@ -111,6 +111,9 @@ If validation fails, provide clear feedback.
 ---
 description: $2
 argument-hint: [arg1] [arg2]
+allowed-tools: Write, Edit
+model: claude-3-5-haiku-20241022
+disable-model-invocation: false
 ---
 
 # $1 Command
@@ -166,7 +169,10 @@ Next steps:
 2. Update frontmatter fields if needed:
    - argument-hint: [arg1] [arg2] (optional)
    - allowed-tools: Tool restrictions (optional)
-3. Test with /plugin-development:test-local
+   - model: Specify different model (optional)
+   - disable-model-invocation: Prevent SlashCommand tool invocation (optional)
+3. Use @path/to/file syntax to reference files in instructions
+4. Test with /plugin-development:test-local
 
 Command will be invoked as: /<plugin-name>:$1
 ```
@@ -200,8 +206,33 @@ Command will be invoked as: /<plugin-name>:$1
 description: Brief, third-person description (shows in /help)
 argument-hint: [arg1] [arg2]  # Optional, shows expected arguments
 allowed-tools: Write, Edit    # Optional, restricts tool access
+model: claude-3-5-haiku-20241022  # Optional, specify different model
+disable-model-invocation: true    # Optional, prevents SlashCommand tool from invoking
 ---
 ```
+
+#### Frontmatter Reference
+
+| Field | Purpose | Default |
+|-------|---------|---------|
+| `description` | Brief description of the command | First line of prompt |
+| `argument-hint` | Expected arguments (shown in auto-complete) | None |
+| `allowed-tools` | List of tools the command can use | Inherits from conversation |
+| `model` | Specific model to use (full ID like `claude-3-5-haiku-20241022`) | Inherits from conversation |
+| `disable-model-invocation` | Prevent SlashCommand tool from calling this command | false |
+
+#### Multiple Invocation Patterns
+
+Use pipe syntax in `argument-hint` to define multiple invocation patterns:
+
+```yaml
+---
+description: Manage project tags
+argument-hint: add [tagId] | remove [tagId] | list
+---
+```
+
+This shows users the different ways to invoke the command.
 
 ### Using Arguments
 
@@ -213,6 +244,20 @@ Example:
 ```markdown
 If the user provided a name via `$1`, use it: "Hello, $1!"
 ```
+
+### File References
+
+Include file contents using the `@` prefix within your command instructions:
+
+```markdown
+# Reference a specific file
+Review the implementation in @src/utils/helpers.js
+
+# Reference multiple files
+Compare @src/old-version.js with @src/new-version.js
+```
+
+The file contents will be included inline when the command is executed.
 
 ### Command Instructions
 
@@ -251,6 +296,53 @@ Analyze the output and report:
 - **Validation first**: Check arguments before execution
 - **Error handling**: Describe what to do when things go wrong
 - **Examples**: Include usage examples in the template
+
+## SlashCommand Tool
+
+The `SlashCommand` tool allows Claude to execute custom slash commands programmatically during a conversation.
+
+### Requirements for SlashCommand Tool Support
+
+For Claude to be able to invoke your command via the SlashCommand tool:
+
+1. **Required**: The `description` frontmatter field must be populated
+2. The command must be user-defined (not a built-in command like `/compact`)
+
+### Character Budget
+
+- **Default limit**: 15,000 characters for slash command content
+- **Customization**: Set `SLASH_COMMAND_TOOL_CHAR_BUDGET` environment variable to adjust
+- **What counts**: Command name, arguments, and description all count toward the budget
+- **When exceeded**: Claude sees only a subset of available commands
+- **Monitoring**: Use `/context` to see warnings displayed as "M of N commands"
+
+### Enabling Claude to Use Commands
+
+Reference the command in prompts or `CLAUDE.md`:
+
+```
+> Run /write-unit-test when you are about to start writing tests.
+```
+
+### Disabling SlashCommand Tool Invocation
+
+To prevent a specific command from being invoked by the SlashCommand tool, add to frontmatter:
+
+```yaml
+---
+description: My command description
+disable-model-invocation: true
+---
+```
+
+### Permission Rules
+
+SlashCommand permissions support exact and prefix matching:
+
+```
+SlashCommand:/commit          # Allows only /commit with no arguments
+SlashCommand:/review-pr:*     # Allows /review-pr with any arguments
+```
 
 ## Common Mistakes to Avoid
 

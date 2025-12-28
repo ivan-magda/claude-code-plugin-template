@@ -1,7 +1,17 @@
 ---
-description: What this agent specializes in and when to invoke it (third person).
-capabilities: ["capability-1", "capability-2", "capability-3"]
+name: agent-name
+description: What this agent specializes in and when to invoke it (third person). Include "PROACTIVELY" for auto-delegation.
+tools: Read, Grep, Glob, Bash
+model: sonnet
+permissionMode: default
+skills: skill1, skill2
 ---
+
+<!--
+Docs: https://docs.anthropic.com/en/docs/claude-code/sub-agents
+NOTE: 'capabilities' is deprecated - use 'tools' instead.
+      Agents use short model names (sonnet/opus/haiku/inherit), not full IDs.
+-->
 
 # Agent Name
 

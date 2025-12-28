@@ -109,8 +109,11 @@ Create a new sub-agent file with proper frontmatter and structure.
 
 ```markdown
 ---
+name: $1
 description: $2
-capabilities: ["capability-1", "capability-2", "capability-3"]
+tools: Read, Grep, Glob, Bash
+model: inherit
+permissionMode: default
 ---
 
 # $1 Agent
@@ -222,8 +225,12 @@ Description: $2
 Next steps:
 1. Edit <plugin-name>/agents/$1.md with specific instructions
 2. Key frontmatter fields:
-   - description: What the agent does (shows in /agents list)
-   - capabilities: List of capabilities (JSON array)
+   - name: Unique agent identifier (lowercase with hyphens)
+   - description: What the agent does and when to invoke (shows in /agents list)
+   - tools: CSV list of tools (optional, inherits all if omitted)
+   - model: sonnet, opus, haiku, or inherit (optional)
+   - permissionMode: default, acceptEdits, bypassPermissions, or plan (optional)
+   - skills: CSV list of skills to auto-load (optional)
 3. Define clear workflow steps
 4. Specify what the agent returns
 5. Test with /plugin-development:test-local
@@ -312,22 +319,61 @@ Or via Task tool in main conversation.
 
 ```yaml
 ---
-description: Third-person description of what this agent does
+name: agent-name
+description: Third-person description of what this agent does and when to invoke it
 ---
 ```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `name` | String | **Required.** Unique identifier using lowercase letters and hyphens (e.g., `code-reviewer`, `test-runner`) |
+| `description` | String | **Required.** Natural language description of when the agent should be invoked. Include "PROACTIVELY" for auto-delegation |
 
 ### Optional Fields
 
 ```yaml
 ---
-description: Agent description
-capabilities: ["capability-1", "capability-2"]    # List of what it can do
+name: agent-name
+description: Agent description. Use PROACTIVELY for auto-delegation.
+tools: Read, Grep, Glob, Bash
+model: sonnet
+permissionMode: default
+skills: skill1, skill2
 ---
 ```
 
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `tools` | CSV String | Inherits all | Comma-separated list of tools (e.g., `Read, Grep, Glob, Bash`). If omitted, inherits all tools from main thread including MCP tools |
+| `model` | String | `sonnet` | Which AI model to use. Valid values: `sonnet`, `opus`, `haiku`, `inherit`. Use `inherit` to match main conversation's model |
+| `permissionMode` | String | `default` | How the agent handles permission requests. Valid values: `default`, `acceptEdits`, `bypassPermissions`, `plan` |
+| `skills` | CSV String | None | Comma-separated list of skills to auto-load. Note: Agents do NOT inherit skills from parent conversation |
+
+### Permission Modes Explained
+
+| Mode | Behavior |
+|------|----------|
+| `default` | Standard permission handling - prompts for confirmation |
+| `acceptEdits` | Automatically accept file edits without prompting |
+| `bypassPermissions` | Skip permission requests entirely |
+| `plan` | Plan mode - research and planning without execution |
+
+### Model Options
+
+| Model | Description |
+|-------|-------------|
+| `sonnet` | Claude Sonnet (default for subagents) |
+| `opus` | Claude Opus |
+| `haiku` | Claude Haiku (faster, lighter) |
+| `inherit` | Use same model as main conversation |
+
+### Deprecation Note
+
+The `capabilities` field is **NOT** in official Anthropic docs and may be deprecated. Use `tools` for agents (not `allowed-tools` which is for skills).
+
 **For complete details on agents**, see:
-- [Subagents documentation](/en/docs/claude-code/sub-agents)
-- [Plugin agents reference](/en/docs/claude-code/plugins-reference#agents)
+- [Subagents documentation](https://code.claude.com/docs/en/sub-agents)
+- [Plugin agents reference](https://code.claude.com/docs/en/plugins-reference#agents)
 
 ## Error Handling
 
@@ -405,15 +451,17 @@ Specializes in security analysis:
 Does everything related to code.
 ```
 
-### 2. Clear Capabilities
+### 2. Clear Tool Configuration
 
-List 2-5 specific capabilities:
+Configure appropriate tools for the agent's purpose:
 ```yaml
-capabilities: [
-  "security-vulnerability-detection",
-  "authentication-analysis",
-  "dependency-audit"
-]
+# For read-only analysis agents:
+tools: Read, Grep, Glob
+
+# For agents that can modify files:
+tools: Read, Edit, Write, Bash, Grep, Glob
+
+# Omit to inherit all tools from main thread
 ```
 
 ### 3. Structured Output
@@ -513,14 +561,14 @@ For comprehensive review, delegate to the code-reviewer agent.
 
 ## Common Mistakes to Avoid
 
-❌ **Too broad scope**
+❌ **Too broad description**
 ```yaml
-capabilities: ["everything", "all-tasks", "general-help"]
+description: Does everything related to code
 ```
 
-✅ **Focused capabilities**
+✅ **Focused description with clear purpose**
 ```yaml
-capabilities: ["security-audit", "vulnerability-scan", "compliance-check"]
+description: Security audit specialist. Scans for vulnerabilities, reviews authentication, and checks compliance. Use PROACTIVELY after code changes.
 ```
 
 ❌ **Vague instructions**
@@ -541,11 +589,14 @@ Analyze the code and find problems.
 After creating an agent:
 ```
 □ Agent file created in agents/ directory
-□ Frontmatter includes description
-□ Capabilities listed (2-5 items)
-□ Clear workflow defined
+□ Frontmatter includes required 'name' field (lowercase with hyphens)
+□ Frontmatter includes required 'description' field
+□ Optional: 'tools' field configured (or inherits all)
+□ Optional: 'model' field set (sonnet/opus/haiku/inherit)
+□ Optional: 'permissionMode' configured if needed
+□ Optional: 'skills' listed for auto-loading
+□ Clear workflow defined in body
 □ Output format specified
-□ Agent name is kebab-case
-□ plugin.json has agents field
+□ plugin.json has agents field (if using custom paths)
 □ Purpose is focused and specific
 ```

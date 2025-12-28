@@ -36,8 +36,13 @@ Activate whenever context includes `.claude-plugin/`, `plugin.json`, `marketplac
 □ Component dirs at plugin root (commands/, agents/, skills/, hooks/)
 □ Do NOT put components inside .claude-plugin/ directory
 □ Commands use kebab-case naming
-□ Skills have valid frontmatter (name + description required)
-□ Skills name matches directory (lowercase-hyphenated, max 64 chars)
+□ Skills have valid frontmatter (name + description required, optional: model, allowed-tools)
+□ Skills name validation:
+  - Matches directory name
+  - Lowercase letters, numbers, hyphens only
+  - Max 64 characters
+  - No reserved words ('anthropic', 'claude')
+  - No XML tags
 □ Hooks use ${CLAUDE_PLUGIN_ROOT} for paths (not relative paths)
 □ All scripts are executable (chmod +x)
 ```
@@ -82,17 +87,18 @@ Activate whenever context includes `.claude-plugin/`, `plugin.json`, `marketplac
 1. Run `/plugin-development:add-skill <name> <when-to-use>`
 2. Edit `skills/<name>/SKILL.md` with your instructions
 3. **Frontmatter requirements**:
-   - `name`: lowercase, hyphenated, max 64 chars (required)
-   - `description`: include both WHAT the Skill does AND WHEN to use it, max 1024 chars (required)
-   - `allowed-tools`: comma-separated list of tools (optional, restricts tool access)
-4. Keep SKILL.md concise; place details in sibling files (reference.md, examples.md, scripts/)
+   - `name`: lowercase letters, numbers, and hyphens only, max 64 chars (required). Cannot contain reserved words 'anthropic' or 'claude'. Cannot contain XML tags.
+   - `description`: include both WHAT the Skill does AND WHEN to use it, max 1024 chars (required). Cannot contain XML tags.
+   - `model`: specify which Claude model to use, e.g., `model: claude-sonnet-4-20250514` (optional, defaults to conversation's model)
+   - `allowed-tools`: comma-separated list of tools (optional). Tools listed don't require permission to use when Skill is active. If omitted, Skill doesn't restrict tools.
+4. Keep SKILL.md under 500 lines for optimal performance; place details in sibling files (reference.md, examples.md, scripts/)
 
 ### Troubleshooting
 
 - **Plugin not loading?** Check `plugin.json` paths are relative to plugin root. Do NOT include `commands`, `agents`, `skills`, or `hooks` fields for standard directories.
 - **Commands not showing?** Verify `commands/` directory exists at plugin root with `.md` files. Do NOT add `commands` field to `plugin.json` for standard paths.
 - **Hooks not running?** Ensure scripts are executable (`chmod +x`) and use `${CLAUDE_PLUGIN_ROOT}` for paths
-- **Skill not triggering?** Check `name` matches directory and is lowercase-hyphenated (max 64 chars). Ensure `description` includes both what and when to use (max 1024 chars)
+- **Skill not triggering?** Check `name` matches directory and uses lowercase letters, numbers, and hyphens only (max 64 chars). Ensure `description` includes both what and when to use (max 1024 chars). Neither field can contain XML tags.
 
 ## Notes
 
