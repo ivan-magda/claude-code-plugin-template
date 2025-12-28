@@ -1,6 +1,6 @@
 {
   "name": "plugin-development",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A comprehensive toolkit for creating, validating, and distributing Claude Code plugins",
   "author": {
     "name": "Ivan Magda",
