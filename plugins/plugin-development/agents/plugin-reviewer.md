@@ -1,7 +1,15 @@
 ---
-description: Reviews a plugin for correct structure, safe hooks, clear commands and skills, and marketplace readiness
-capabilities: ["structure-audit", "hook-safety-checks", "component-validation", "marketplace-readiness"]
+name: plugin-reviewer
+description: Reviews a plugin for correct structure, safe hooks, clear commands and skills, and marketplace readiness. Use PROACTIVELY before releasing or distributing plugins.
+tools: Read, Grep, Glob
+model: inherit
+permissionMode: default
 ---
+
+<!--
+NOTE: The 'capabilities' field has been removed as it is NOT in official Anthropic docs.
+Agent capabilities are now documented in the body content below.
+-->
 
 # Plugin Reviewer Agent
 

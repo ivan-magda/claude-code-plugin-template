@@ -1,7 +1,32 @@
 ---
-description: What this agent specializes in and when to invoke it (third person).
-capabilities: ["capability-1", "capability-2", "capability-3"]
+name: agent-name
+description: What this agent specializes in and when to invoke it (third person). Include "PROACTIVELY" for auto-delegation.
+tools: Read, Grep, Glob, Bash
+model: sonnet
+permissionMode: default
+skills: skill1, skill2
 ---
+
+<!--
+AGENT FRONTMATTER REFERENCE (from official Anthropic docs):
+
+REQUIRED FIELDS:
+- name: Unique identifier (lowercase letters and hyphens, e.g., code-reviewer)
+- description: When to invoke this agent and its purpose
+
+OPTIONAL FIELDS:
+- tools: Comma-separated list of tools (e.g., "Read, Grep, Glob, Bash")
+         If omitted, inherits all tools from main thread including MCP tools
+- model: Which AI model to use
+         Valid values: sonnet, opus, haiku, inherit (or omit for default)
+         Use 'inherit' to match main conversation's model
+- permissionMode: How the agent handles permission requests
+         Valid values: default, acceptEdits, bypassPermissions, plan
+- skills: Comma-separated list of skills to auto-load (agents don't inherit skills)
+
+NOTE: The 'capabilities' field is NOT in official docs and may be deprecated.
+      Use 'tools' for agents (not 'allowed-tools' which is for skills).
+-->
 
 # Agent Name
 
