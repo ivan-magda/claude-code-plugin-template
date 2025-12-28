@@ -37,7 +37,12 @@ Activate whenever context includes `.claude-plugin/`, `plugin.json`, `marketplac
 □ Do NOT put components inside .claude-plugin/ directory
 □ Commands use kebab-case naming
 □ Skills have valid frontmatter (name + description required, optional: model, allowed-tools)
-□ Skills name matches directory (lowercase letters, numbers, hyphens only; max 64 chars; no 'anthropic'/'claude' reserved words; no XML tags)
+□ Skills name validation:
+  - Matches directory name
+  - Lowercase letters, numbers, hyphens only
+  - Max 64 characters
+  - No reserved words ('anthropic', 'claude')
+  - No XML tags
 □ Hooks use ${CLAUDE_PLUGIN_ROOT} for paths (not relative paths)
 □ All scripts are executable (chmod +x)
 ```

@@ -218,7 +218,7 @@ disable-model-invocation: true    # Optional, prevents SlashCommand tool from in
 | `description` | Brief description of the command | First line of prompt |
 | `argument-hint` | Expected arguments (shown in auto-complete) | None |
 | `allowed-tools` | List of tools the command can use | Inherits from conversation |
-| `model` | Specific model to use | Inherits from conversation |
+| `model` | Specific model to use (full ID like `claude-3-5-haiku-20241022`) | Inherits from conversation |
 | `disable-model-invocation` | Prevent SlashCommand tool from calling this command | false |
 
 #### Multiple Invocation Patterns

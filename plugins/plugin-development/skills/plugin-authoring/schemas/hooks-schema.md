@@ -173,7 +173,7 @@ Runs when Claude Code sends notifications.
 
 **Matchers**:
 - `permission_prompt` - Claude needs permission to use a tool
-- `idle_prompt` - Prompt input idle for 60+ seconds
+- `idle_prompt` - Prompt input idle for 60+ seconds (system default, not configurable)
 - `auth_success` - Authentication success notifications
 - `elicitation_dialog` - Claude Code needs input for MCP tool elicitation
 

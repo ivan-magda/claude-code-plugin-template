@@ -120,6 +120,8 @@ With optional `ref` (branch/tag) and `path` (subdirectory) fields:
 - **ref**: Optional - Git reference (branch, tag, or commit)
 - **path**: Optional - Subdirectory within the repository
 
+> **Migration note**: If you previously used URL strings with `/tree/` paths (e.g., `https://github.com/user/repo/tree/main/plugins/my-plugin`), migrate to the object format with `ref` and `path` fields.
+
 ### Git URL Source
 
 For non-GitHub git repositories (GitLab, Bitbucket, self-hosted):
@@ -242,7 +244,10 @@ Plugin entries can override default component locations and provide inline confi
     "custom-lsp": {
       "command": "${CLAUDE_PLUGIN_ROOT}/lsp/server",
       "args": ["--config", "${CLAUDE_PLUGIN_ROOT}/lsp-config.json"],
-      "languages": ["python", "javascript"]
+      "extensionToLanguage": {
+        ".py": "python",
+        ".js": "javascript"
+      }
     }
   },
   "strict": false
