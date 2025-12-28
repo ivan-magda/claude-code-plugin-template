@@ -70,7 +70,7 @@ Edit `.claude-plugin/marketplace.json` to customize your marketplace:
 }
 ```
 
-**Note**: The `name` field should use kebab-case (lowercase with hyphens). See the [Plugin Marketplaces documentation](https://docs.claude.com/en/docs/claude-code/plugin-marketplaces#marketplace-schema) for complete schema details.
+**Note**: The `name` field should use kebab-case (lowercase with hyphens). See the [Plugin Marketplaces documentation](https://code.claude.com/docs/en/plugin-marketplaces#marketplace-schema) for complete schema details.
 
 ### Team Settings (Optional)
 
@@ -89,7 +89,7 @@ You can configure automatic marketplace installation for team projects by adding
 }
 ```
 
-When team members trust the repository folder, Claude Code automatically installs these marketplaces. See [Configure team marketplaces](https://docs.claude.com/en/docs/claude-code/plugin-marketplaces#configure-team-marketplaces) for details.
+When team members trust the repository folder, Claude Code automatically installs these marketplaces. See [Configure team marketplaces](https://code.claude.com/docs/en/plugin-marketplaces#configure-team-marketplaces) for details.
 
 ## Testing
 
@@ -194,7 +194,7 @@ Edit `plugins/my-plugin/.claude-plugin/plugin.json`:
 }
 ```
 
-**Note**: The `author` field must be an object with `name`, `email`, and optionally `url`. See the [Plugins Reference](https://docs.claude.com/en/docs/claude-code/plugins-reference#plugin-manifest-schema) for complete schema details.
+**Note**: The `author` field must be an object with `name`, `email`, and optionally `url`. See the [Plugins Reference](https://code.claude.com/docs/en/plugins-reference#plugin-manifest-schema) for complete schema details.
 
 #### Step 3: Create Command
 
@@ -219,7 +219,7 @@ argument-hint: [arg1] [arg2]
 [Additional context and guidelines]
 ```
 
-**Note**: Commands should include frontmatter with `description` and optionally `argument-hint`. The content is a prompt that Claude executes. See the [Slash Commands documentation](https://docs.claude.com/en/docs/claude-code/slash-commands#plugin-commands) for details.
+**Note**: Commands should include frontmatter with `description` and optionally `argument-hint`. The content is a prompt that Claude executes. See the [Slash Commands documentation](https://code.claude.com/docs/en/slash-commands#plugin-commands) for details.
 
 #### Step 4: Register in Marketplace
 
@@ -265,10 +265,10 @@ Start with [`docs/plugins.md`](docs/plugins.md) for plugin development basics, o
 
 ### Official Claude Code Documentation
 
-- **[Claude Code Plugins](https://docs.claude.com/en/docs/claude-code/plugins)**: Complete plugin development guide
-- **[Plugin Marketplaces](https://docs.claude.com/en/docs/claude-code/plugin-marketplaces)**: Marketplace creation and management
-- **[Plugins Reference](https://docs.claude.com/en/docs/claude-code/plugins-reference)**: Technical specifications and schemas
-- **[Slash Commands](https://docs.claude.com/en/docs/claude-code/slash-commands)**: Command development details
+- **[Claude Code Plugins](https://code.claude.com/docs/en/plugins)**: Complete plugin development guide
+- **[Plugin Marketplaces](https://code.claude.com/docs/en/plugin-marketplaces)**: Marketplace creation and management
+- **[Plugins Reference](https://code.claude.com/docs/en/plugins-reference)**: Technical specifications and schemas
+- **[Slash Commands](https://code.claude.com/docs/en/slash-commands)**: Command development details
 
 ## License
 
