@@ -1,6 +1,6 @@
 # Claude Code Plugin Marketplace Template
 
-A GitHub template repository for creating and managing your own Claude Code plugin marketplace with a plugin development toolkit.
+A GitHub template for creating Claude Code plugin marketplaces. Includes plugin scaffolding, validation commands, hooks, skills, agents, and CI/CD workflows. Ready-to-use toolkit for teams distributing Claude Code plugins.
 
 ## Quick Start
 
