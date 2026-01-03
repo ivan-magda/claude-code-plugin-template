@@ -176,6 +176,20 @@ For iterative development:
 /plugin install plugin-name@my-team-marketplace
 ```
 
+## Uninstalling
+
+Remove the marketplace and its plugins from Claude Code:
+
+```bash
+# Remove a specific plugin
+/plugin uninstall plugin-name@my-team-marketplace
+
+# Remove the marketplace entirely
+/plugin marketplace remove my-team-marketplace
+```
+
+To completely remove, delete the cloned repository directory.
+
 ## Creating Plugins Manually
 
 If you prefer manual setup over the scaffolding commands:
@@ -302,6 +316,10 @@ See the [plugin-development README](plugins/plugin-development/README.md) for co
 5. Commit your changes (`git commit -m 'Add amazing plugin'`)
 6. Push to the branch (`git push origin feature/amazing-plugin`)
 7. Open a Pull Request
+
+## Acknowledgments
+
+Built for [Claude Code](https://claude.com/claude-code) by [Anthropic](https://www.anthropic.com/).
 
 ## License
 
