@@ -2,8 +2,10 @@
 
 Create and distribute Claude Code plugins for your team or community. This GitHub template provides everything you need to build a plugin marketplace — from scaffolding and validation to CI/CD automation.
 
-[![Validate Plugins](https://github.com/ivan-magda/claude-code-plugin-template/actions/workflows/validate-plugins.yml/badge.svg)](https://github.com/ivan-magda/claude-code-plugin-template/actions/workflows/validate-plugins.yml)
+[![GitHub stars](https://img.shields.io/github/stars/ivan-magda/claude-code-plugin-template?style=social)](https://github.com/ivan-magda/claude-code-plugin-template/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/ivan-magda/claude-code-plugin-template?style=social)](https://github.com/ivan-magda/claude-code-plugin-template/network/members)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Validate Plugins](https://github.com/ivan-magda/claude-code-plugin-template/actions/workflows/validate-plugins.yml/badge.svg)](https://github.com/ivan-magda/claude-code-plugin-template/actions/workflows/validate-plugins.yml)
 
 ## Why Use This Template?
 
