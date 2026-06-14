@@ -407,7 +407,7 @@ MIT License - See LICENSE file for details
 
 ## Version
 
-**1.3.0** - Plugin development toolkit: scaffold, validate, review, and team-ready distribution
+**1.4.0** - Documentation refresh: re-synced docs with current Claude Code docs, updated model IDs and canonical links
 
 ### Features
 - ✅ Plugin scaffolding (init command)
