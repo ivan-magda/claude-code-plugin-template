@@ -112,7 +112,7 @@ If validation fails, provide clear feedback.
 description: $2
 argument-hint: [arg1] [arg2]
 allowed-tools: Write, Edit
-model: claude-3-5-haiku-20241022
+model: claude-haiku-4-5-20251001
 disable-model-invocation: false
 ---
 
@@ -194,8 +194,8 @@ Command will be invoked as: /<plugin-name>:$1
 - Ready to edit with specific instructions
 
 **For complete details on commands**, see:
-- [Slash commands documentation](/en/docs/claude-code/slash-commands)
-- [Plugin commands reference](/en/docs/claude-code/plugins-reference#commands)
+- [Slash commands documentation](https://code.claude.com/docs/en/slash-commands)
+- [Plugin commands reference](https://code.claude.com/docs/en/plugins-reference#commands)
 
 ## Template Details
 
@@ -206,7 +206,7 @@ Command will be invoked as: /<plugin-name>:$1
 description: Brief, third-person description (shows in /help)
 argument-hint: [arg1] [arg2]  # Optional, shows expected arguments
 allowed-tools: Write, Edit    # Optional, restricts tool access
-model: claude-3-5-haiku-20241022  # Optional, specify different model
+model: claude-haiku-4-5-20251001  # Optional, specify different model
 disable-model-invocation: true    # Optional, prevents SlashCommand tool from invoking
 ---
 ```
@@ -218,7 +218,7 @@ disable-model-invocation: true    # Optional, prevents SlashCommand tool from in
 | `description` | Brief description of the command | First line of prompt |
 | `argument-hint` | Expected arguments (shown in auto-complete) | None |
 | `allowed-tools` | List of tools the command can use | Inherits from conversation |
-| `model` | Specific model to use (full ID like `claude-3-5-haiku-20241022`) | Inherits from conversation |
+| `model` | Specific model to use (full ID like `claude-haiku-4-5-20251001`, or an alias like `haiku`) | Inherits from conversation |
 | `disable-model-invocation` | Prevent SlashCommand tool from calling this command | false |
 
 #### Multiple Invocation Patterns

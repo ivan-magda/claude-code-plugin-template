@@ -231,9 +231,9 @@ Claude will auto-discover this Skill when the plugin is installed.
 - Ready to add guidance and reference files
 
 **For complete details on Skills**, see:
-- [Agent Skills documentation](/en/docs/claude-code/skills)
-- [Agent Skills overview](/en/docs/agents-and-tools/agent-skills/overview)
-- [Skills best practices](/en/docs/agents-and-tools/agent-skills/best-practices)
+- [Agent Skills documentation](https://code.claude.com/docs/en/skills)
+- [Agent Skills overview](https://docs.claude.com/en/docs/agents-and-tools/agent-skills/overview)
+- [Skills best practices](https://docs.claude.com/en/docs/agents-and-tools/agent-skills/best-practices)
 
 ## Skill Frontmatter
 

@@ -8,7 +8,7 @@ allowed-tools: Read, Grep, Glob
 
 You are the canonical guide for Claude Code plugin development. Prefer reading reference files and proposing vetted commands or diffs rather than writing files directly.
 
-**Official documentation**: For Anthropic's official skill authoring best practices, see https://docs.anthropic.com/en/docs/agents-and-tools/agent-skills/skill-authoring-best-practices
+**Official documentation**: For Anthropic's official skill authoring best practices, see https://docs.claude.com/en/docs/agents-and-tools/agent-skills/best-practices
 
 ## Triggers & Scope
 
@@ -117,7 +117,7 @@ For detailed explanations: [best-practices/common-mistakes.md](best-practices/co
 3. **Frontmatter requirements**:
    - `name`: lowercase letters, numbers, and hyphens only, max 64 chars (required). Cannot contain reserved words 'anthropic' or 'claude'. Cannot contain XML tags.
    - `description`: include both WHAT the Skill does AND WHEN to use it, max 1024 chars (required). Cannot contain XML tags.
-   - `model`: specify which Claude model to use, e.g., `model: claude-sonnet-4-20250514` (optional, defaults to conversation's model)
+   - `model`: specify which Claude model to use, e.g., `model: claude-sonnet-4-6` (optional, defaults to conversation's model)
    - `allowed-tools`: comma-separated list of tools (optional). Tools listed don't require permission to use when Skill is active. If omitted, Skill doesn't restrict tools.
 4. Keep SKILL.md under 500 lines for optimal performance; place details in sibling files (reference.md, examples.md, scripts/)
 

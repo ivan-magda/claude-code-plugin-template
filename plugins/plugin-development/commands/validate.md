@@ -314,7 +314,7 @@ Next steps:
 
 Need help?
 - Review error messages for specific fixes
-- Check best practices: /plugin-development:help
+- Check best practices: see the `plugin-authoring` skill (`skills/plugin-authoring/`)
 - Common issues documented in examples
 ```
 

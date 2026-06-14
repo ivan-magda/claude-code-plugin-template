@@ -300,8 +300,8 @@ Exit codes for PostToolUse, SessionStart, SessionEnd, Notification, PreCompact:
 - Provides usage instructions
 
 **For complete details on hooks**, see:
-- [Hooks reference documentation](/en/docs/claude-code/hooks)
-- [Plugin hooks reference](/en/docs/claude-code/plugins-reference#hooks)
+- [Hooks reference documentation](https://code.claude.com/docs/en/hooks)
+- [Plugin hooks reference](https://code.claude.com/docs/en/plugins-reference#hooks)
 
 ## Hook Event Details
 

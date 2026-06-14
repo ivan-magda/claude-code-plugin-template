@@ -389,10 +389,10 @@ To extend:
 ## Resources
 
 ### Official Documentation
-- [Claude Code Plugins](https://docs.claude.com/en/docs/claude-code/plugins)
-- [Plugin Marketplaces](https://docs.claude.com/en/docs/claude-code/plugin-marketplaces)
-- [Plugins Reference](https://docs.claude.com/en/docs/claude-code/plugins-reference)
-- [Slash Commands](https://docs.claude.com/en/docs/claude-code/slash-commands)
+- [Claude Code Plugins](https://code.claude.com/docs/en/plugins)
+- [Plugin Marketplaces](https://code.claude.com/docs/en/plugin-marketplaces)
+- [Plugins Reference](https://code.claude.com/docs/en/plugins-reference)
+- [Slash Commands](https://code.claude.com/docs/en/slash-commands)
 
 ### Local Documentation
 See `skills/plugin-authoring/` for:
@@ -407,7 +407,7 @@ MIT License - See LICENSE file for details
 
 ## Version
 
-**1.0.0** - Initial release
+**1.3.0** - Plugin development toolkit: scaffold, validate, review, and team-ready distribution
 
 ### Features
 - ✅ Plugin scaffolding (init command)

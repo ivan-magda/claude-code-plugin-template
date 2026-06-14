@@ -8,7 +8,7 @@ skills: skill1, skill2
 ---
 
 <!--
-Docs: https://docs.anthropic.com/en/docs/claude-code/sub-agents
+Docs: https://code.claude.com/docs/en/sub-agents
 NOTE: 'capabilities' is deprecated - use 'tools' instead.
       Agents use short model names (sonnet/opus/haiku/inherit), not full IDs.
 -->

@@ -94,5 +94,5 @@ When adding new documentation:
 ## See Also
 
 - [Claude Code Main Documentation](/) - Complete Claude Code documentation
-- [Plugin Development Examples](https://github.com/anthropics/claude-code-plugins) - Community plugin examples
+- [Plugin Development Examples](https://github.com/anthropics/claude-plugins-community) - Community plugin examples
 - [Claude Code GitHub](https://github.com/anthropics/claude-code) - Source code and issues
