@@ -134,7 +134,7 @@ Configure automatic marketplace installation for your team by adding `.claude/se
 }
 ```
 
-When team members trust the repository folder, Claude Code installs the marketplace for them. See [Configure team marketplaces](https://code.claude.com/docs/en/plugin-marketplaces#configure-team-marketplaces) for details.
+When team members trust the repository folder, Claude Code installs the marketplace for them. See [Configure team marketplaces](https://code.claude.com/docs/en/discover-plugins#configure-team-marketplaces) for details.
 
 ## Installing from GitHub
 
